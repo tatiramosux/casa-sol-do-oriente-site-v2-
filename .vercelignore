@@ -1,0 +1,14 @@
+_old
+.next
+.vinext
+.wrangler
+build
+db
+dist
+drizzle
+examples
+node_modules
+tests
+worker
+.env*
+*.log

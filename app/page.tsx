@@ -1,40 +1,381 @@
 "use client";
-import {useMemo,useState} from "react";
+
+import { useCallback, useEffect, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import * as Tooltip from "@radix-ui/react-tooltip";
-import {AnimatePresence,motion} from "motion/react";
-import {Activity,CalendarDays,Check,ChevronLeft,ChevronRight,Clock3,GraduationCap,HeartHandshake,Info,MapPin,Menu,Plus,Shirt,Sun,Users,X} from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  AtSign,
+  CalendarDays,
+  ChevronDown,
+  CircleUserRound,
+  Hand,
+  Heart,
+  MapPin,
+  Menu,
+  Star,
+  Sun,
+  X,
+} from "lucide-react";
+import styles from "./page.module.css";
+import { SiteSearch } from "../components/site-search";
+import { ProjectsMenu } from "../components/projects-menu";
+import { IngressoMenu } from "../components/ingresso-menu";
+import { RitualisticaMenu } from "../components/ritualistica-menu";
 
-type Cat="giras"|"cursos"|"apometria"|"social";
-type Item={id:number;day:number;title:string;time:string;cat:Cat;open:boolean;description:string};
-const cats={
- giras:{label:"Giras e atividades espirituais",short:"Giras",color:"amber",Icon:Sun},
- cursos:{label:"Cursos e palestras",short:"Cursos",color:"orange",Icon:GraduationCap},
- apometria:{label:"Grupo de Apometria",short:"Apometria",color:"blue",Icon:Activity},
- social:{label:"Projetos sociais e Hospital Terapêutico",short:"Projetos sociais",color:"purple",Icon:HeartHandshake},
-} satisfies Record<Cat,{label:string;short:string;color:string;Icon:typeof Sun}>;
-const event=(id:number,day:number,title:string,time:string,cat:Cat,open=true,description="Atividade de acolhimento e cuidado promovida pela Casa Sol do Oriente."):Item=>({id,day,title,time,cat,open,description});
-const events=[event(1,2,"Cirurgia Espiritual","19:30","giras"),event(2,4,"Desenvolvimento Mediúnico","19:00","cursos",false),event(3,5,"Gira de Caboclos","20:00","giras"),event(4,7,"Grupo de Apometria","14:00","apometria",false),event(5,8,"Hospital Terapêutico","09:00","social",true,"Terapias complementares e integrativas oferecidas por profissionais voluntários."),event(6,9,"Cirurgia Espiritual","19:30","giras"),event(7,11,"Espiritualidade no cotidiano","19:30","cursos"),event(8,12,"Gira de Pretos-Velhos","20:00","giras"),event(9,15,"A vida continua","15:00","social",true,"Roda de acolhimento para pessoas que atravessam processos de luto e transformação."),event(10,16,"Cirurgia Espiritual","19:30","giras"),event(11,18,"Orixás e suas forças","19:00","cursos",false),event(12,19,"Gira de Baianos","20:00","giras"),event(13,21,"Grupo de Apometria","14:00","apometria",false),event(14,22,"Firmando os trabalhos","10:00","social"),event(15,23,"Cirurgia Espiritual","19:30","giras"),event(16,25,"Roda de conversa: Caridade","19:30","cursos"),event(17,26,"Gira de Exus e Pombagiras","20:00","giras"),event(18,29,"Pão Solidário da Vó Margarida","08:30","social",false),event(19,30,"Cirurgia Espiritual","19:30","giras")];
-const days=[...Array.from({length:6},(_,i)=>({n:26+i,out:true})),...Array.from({length:31},(_,i)=>({n:i+1,out:false})),...Array.from({length:3},(_,i)=>({n:i+1,out:true}))];
-const weekday=(d:number)=>[2,9,16,23,30].includes(d)?"SEG":[4,11,18,25].includes(d)?"QUA":[5,12,19,26].includes(d)?"QUI":[7,21].includes(d)?"SÁB":[8,15,22,29].includes(d)?"DOM":"TER";
-const google=(e:Item)=>{const d=String(e.day).padStart(2,"0"),s=e.time.replace(":","")+"00",end=String(+e.time.slice(0,2)+1).padStart(2,"0")+e.time.slice(3)+"00";return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(e.title)}&dates=202609${d}T${s}/202609${d}T${end}&details=${encodeURIComponent(e.description)}&location=${encodeURIComponent("Rua Francisco Nunes, 437 - Curitiba")}`};
+const projects = [
+  {
+    title: "Hospital Terapêutico",
+    eyebrow: "Terapias integrativas",
+    image: "/casa-sol/banner-hospital.webp",
+    href: "/projetos/hospital-terapeutico",
+    showDates: true,
+    alt: "Arte do projeto Hospital Terapêutico da Casa Sol do Oriente",
+    description:
+      "Terapias complementares e suporte psicológico oferecidos à comunidade por uma rede de terapeutas voluntários.",
+  },
+  {
+    title: "A vida continua",
+    eyebrow: "Acolhimento ao luto",
+    image: "/casa-sol/projeto-4-hd.jpg",
+    href: "/projetos/a-vida-continua",
+    showDates: true,
+    alt: "Arte do projeto A Vida Continua, da Casa Sol do Oriente",
+    description:
+      "Um espaço seguro de escuta para quem atravessa o luto — pela perda de uma pessoa, uma relação, um sonho ou uma grande mudança de vida.",
+  },
+  {
+    title: "Firmando os trabalhos",
+    eyebrow: "Rede de apoio",
+    image: "/casa-sol/projeto-3-hd.jpg",
+    href: "/projetos/firmando-os-trabalhos",
+    showDates: false,
+    alt: "Arte do projeto Firmando os Trabalhos da Casa Sol do Oriente",
+    description:
+      "Uma rede que aproxima profissionais, empreendedores e a comunidade para compartilhar oportunidades e fortalecer novos caminhos.",
+  },
+  {
+    title: "Pão solidário da Vó Margarida",
+    eyebrow: "Ação comunitária",
+    image: "/casa-sol/projeto-2-hd.jpg",
+    href: "/projetos/pao-solidario",
+    showDates: false,
+    alt: "Arte do projeto Pão Solidário da Vó Margarida",
+    description:
+      "Médiuns voluntários preparam e distribuem pães à comunidade dos arredores da Casa, levando alimento, presença e cuidado.",
+  },
+] as const;
 
-export default function Home(){
- const [active,setActive]=useState(new Set<Cat>(["giras","cursos","apometria","social"]));
- const [selected,setSelected]=useState<Item|null>(null);const [menu,setMenu]=useState(false);
- const visible=useMemo(()=>events.filter(e=>active.has(e.cat)),[active]);
- const toggle=(c:Cat)=>setActive(old=>{const next=new Set(old);next.has(c)?next.delete(c):next.add(c);return next});
- return <Tooltip.Provider delayDuration={250}><div className="page">
-  <header><div className="brand-icon"><Sun/></div><div className="brand"><strong>Casa Sol do Oriente</strong><span>Casa Universalista</span></div><nav><a>Início</a><a className="active">Calendário</a><a href="#orientacoes">Orientações</a><a href="#contato">Contato</a></nav><button className="menu" onClick={()=>setMenu(!menu)} aria-label="Abrir menu">{menu?<X/>:<Menu/>}</button>{menu&&<motion.div className="mobile-nav" initial={{opacity:0,y:-6}} animate={{opacity:1,y:0}}><a>Início</a><a>Calendário</a><a href="#orientacoes">Orientações</a><a href="#contato">Contato</a></motion.div>}</header>
-  <main><section className="hero"><motion.div initial={{opacity:0,y:16}} animate={{opacity:1,y:0}}><p className="eyebrow"><CalendarDays/> Agenda da Casa</p><h1>Calendário de<br/><em>Setembro</em></h1><p className="intro">Acompanhe nossas giras, cursos, palestras e projetos sociais. Encontre o seu momento de conexão, cuidado e partilha.</p></motion.div><motion.div className="sun-art" initial={{opacity:0,scale:.8,rotate:-15}} animate={{opacity:1,scale:1,rotate:0}}><i/><b/><Sun/></motion.div></section>
-  <section className="calendar-section"><div className="toolbar"><div className="month"><Tip text="Mês anterior"><button aria-label="Mês anterior"><ChevronLeft/></button></Tip><div><span>Setembro</span><strong>2026</strong></div><Tip text="Próximo mês"><button aria-label="Próximo mês"><ChevronRight/></button></Tip><button className="today">Hoje</button></div><p><b>{visible.length}</b> atividades encontradas</p></div>
-  <div className="filters"><span>Filtrar:</span>{(Object.keys(cats) as Cat[]).map(c=>{const x=cats[c],Icon=x.Icon,on=active.has(c);return <button key={c} className={`filter ${x.color} ${on?"":"off"}`} onClick={()=>toggle(c)} aria-pressed={on}><Icon/>{x.short}{on&&<Check/>}</button>})}<button className="clear" onClick={()=>setActive(new Set())}>Limpar filtros</button></div>
-  <div className="calendar"><div className="week">{["DOM","SEG","TER","QUA","QUI","SEX","SÁB"].map(d=><div key={d}>{d}</div>)}</div><div className="grid">{days.map((d,i)=>{const list=d.out?[]:visible.filter(e=>e.day===d.n);return <div className={`cell ${d.out?"outside":""}`} key={i}><span className={d.n===8&&!d.out?"current":""}>{d.n}</span><div>{list.map(e=><EventCard key={e.id} item={e} onClick={()=>setSelected(e)}/>)}</div></div>})}</div></div>
-  <div className="mobile-agenda">{Array.from({length:31},(_,i)=>i+1).map(day=>{const list=visible.filter(e=>e.day===day);return list.length?<div className="mobile-day" key={day}><div className="date"><strong>{String(day).padStart(2,"0")}</strong><span>{weekday(day)}</span></div><div>{list.map(e=><EventCard mobile key={e.id} item={e} onClick={()=>setSelected(e)}/>)}</div></div>:null})}</div></section>
-  <section id="orientacoes" className="notice"><div><Info/><span><strong>Antes de vir à Casa</strong>Consulte as orientações de cada atividade e programe sua chegada com tranquilidade.</span></div><a href="https://www.casasoldooriente.com.br/gira.html" target="_blank" rel="noreferrer">Ver orientações gerais →</a></section></main>
-  <footer id="contato"><div><Sun/><span><strong>Casa Sol do Oriente</strong><small>Amor, caridade e transformação.</small></span></div><p>Rua Francisco Nunes, 437 · Rebouças · Curitiba / PR</p><small>© 2026 Casa Universalista Sol do Oriente</small></footer>
-  <Dialog.Root open={!!selected} onOpenChange={open=>!open&&setSelected(null)}><AnimatePresence>{selected&&<Dialog.Portal forceMount><Dialog.Overlay asChild><motion.div className="overlay" initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}/></Dialog.Overlay><Dialog.Content asChild aria-describedby="description"><motion.div className="dialog" initial={{opacity:0,y:24,scale:.97}} animate={{opacity:1,y:0,scale:1}} exit={{opacity:0,y:12,scale:.98}}><i className={`accent ${cats[selected.cat].color}`}/><Dialog.Close className="close" aria-label="Fechar"><X/></Dialog.Close><div className="dialog-title"><span className={`icon ${cats[selected.cat].color}`}>{(()=>{const Icon=cats[selected.cat].Icon;return <Icon/>})()}</span><div><small>{cats[selected.cat].label}</small><Dialog.Title>{selected.title}</Dialog.Title></div></div><div className="meta"><span><CalendarDays/> {selected.day} de setembro de 2026</span><span><Clock3/> {selected.time}</span><span><MapPin/> Casa Sol do Oriente</span></div><b className={`badge ${selected.open?"public":"closed"}`}><Users/>{selected.open?"Aberto ao público":"Fechado / com inscrição"}</b><Dialog.Description id="description">{selected.description}</Dialog.Description><div className="guidance"><h3><Shirt/> Orientações gerais</h3><p><Check/>Chegue com antecedência para o acolhimento</p><p><Check/>Use roupas confortáveis e discretas</p></div><a className="google" href={google(selected)} target="_blank" rel="noreferrer"><Plus/>Adicionar ao Google Agenda</a></motion.div></Dialog.Content></Dialog.Portal>}</AnimatePresence></Dialog.Root>
- </div></Tooltip.Provider>
+const navItems = [
+  { label: "Início", href: "/" },
+  { label: "História", href: "/historia" },
+  { label: "Ingresso", href: "/ingresso" },
+  { label: "Projetos", href: "/projetos" },
+  { label: "Ritualística", href: "/ritualistica" },
+  { label: "Musicalidade", href: "/musicalidade" },
+  { label: "Calendário", href: "/calendario" },
+] as const;
+
+const googleReviews = [
+  {
+    author: "Solange Stecki Rodrigues",
+    quote: "Comecei a ir ano passado, me sinto acolhida sempre que participo, lugar extremamente fraternal.",
+  },
+  {
+    author: "Clauluz",
+    quote: "Lugar abençoado, com muitas curas e bençãos.",
+  },
+  {
+    author: "Camila Ramasine",
+    quote: "Energia incrível, trabalho feito com comprometimento em prol do amor e a caridade. Uma verdadeira família espiritual!",
+  },
+] as const;
+
+const googleMapsUrl = "https://www.google.com/maps/place/Casa+Sol+do+Oriente/@-25.4451668,-49.2570482,17z/data=!4m8!3m7!1s0x94dce567845c3b19:0x7897c51f987ed45f!8m2!3d-25.4451668!4d-49.2570482!9m1!1b1!16s%2Fg%2F11l2z0qzrp";
+
+export default function Home() {
+  const [activeProject, setActiveProject] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const goTo = useCallback((index: number) => {
+    setActiveProject((index + projects.length) % projects.length);
+  }, []);
+
+  useEffect(() => {
+    if (paused) return;
+    const timer = window.setTimeout(
+      () => setActiveProject((current) => (current + 1) % projects.length),
+      10000,
+    );
+    return () => window.clearTimeout(timer);
+  }, [activeProject, paused]);
+
+  const project = projects[activeProject];
+
+  return (
+    <div className={styles.siteShell}>
+      <a className={styles.skipLink} href="#conteudo">
+        Ir para o conteúdo
+      </a>
+
+      <header className={styles.header}>
+        <button
+          className={styles.menuButton}
+          type="button"
+          aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          {menuOpen ? <X /> : <Menu />}
+        </button>
+        <a className={styles.brand} href="/" aria-label="Casa Sol do Oriente — início">
+          <img src="/casa-sol/logo.png" alt="Casa Sol do Oriente — Casa Universalista" />
+        </a>
+
+        <nav className={styles.desktopNav} aria-label="Navegação principal">
+          {navItems.map((item) => item.href === "/projetos" ? <ProjectsMenu key={item.href} /> : item.href === "/ingresso" ? <IngressoMenu key={item.href} /> : item.href === "/ritualistica" ? <RitualisticaMenu key={item.href} /> : <a key={item.href} href={item.href} aria-current={item.href === "/" ? "page" : undefined}>{item.label}</a>)}
+        </nav>
+
+        <SiteSearch />
+
+        <a className={styles.headerCta} href="/calendario" aria-label="Ver próximos encontros">
+          <CalendarDays aria-hidden="true" /><span>Ver próximos encontros</span>
+        </a>
+
+        {menuOpen && (
+          <nav className={styles.mobileNav} aria-label="Navegação mobile">
+            {navItems.map((item) => item.href === "/projetos" ? <ProjectsMenu key={item.href} /> : item.href === "/ingresso" ? <IngressoMenu key={item.href} /> : item.href === "/ritualistica" ? <RitualisticaMenu key={item.href} /> : <a key={item.href} href={item.href} onClick={() => setMenuOpen(false)}>{item.label}</a>)}
+          </nav>
+        )}
+      </header>
+
+      <main id="conteudo">
+        <section className={styles.hero} aria-labelledby="hero-title">
+          <div
+            className={styles.carousel}
+            aria-roledescription="carrossel"
+            aria-label="Projetos e iniciativas sociais"
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
+            onFocus={() => setPaused(true)}
+            onBlur={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget)) setPaused(false);
+            }}
+          >
+            {projects.map((item, index) => (
+              <img
+                key={item.title}
+                className={`${styles.projectImage} ${index === activeProject ? styles.projectImageActive : ""}`}
+                src={item.image}
+                alt={index === activeProject ? item.alt : ""}
+                aria-hidden={index !== activeProject}
+              />
+            ))}
+          </div>
+          <div className={styles.heroContent}>
+            <div className={styles.heroCopy} aria-live="polite" aria-atomic="true">
+              <div className={styles.eyebrow}>
+                Projetos sociais
+              </div>
+              <span className={styles.heroProjectLabel}>{project.eyebrow}</span>
+              <h1 id="hero-title" key={project.title}>{project.title}</h1>
+              <p key={project.description}>{project.description}</p>
+              <div className={styles.heroActions}>
+                {project.showDates && (
+                  <a className={styles.primaryButton} href="/calendario">
+                    <CalendarDays aria-hidden="true" />
+                    Ver próximas datas
+                  </a>
+                )}
+                <a
+                  className={styles.textButton}
+                  href={project.href}
+                >
+                  Conheça o projeto
+                  <ArrowRight aria-hidden="true" />
+                </a>
+              </div>
+            </div>
+
+          </div>
+          <div className={styles.carouselRail} data-paused={paused || undefined} aria-label="Selecionar projeto">
+            <div className={styles.numberedNav}>
+              {projects.map((item, index) => (
+                <button
+                  key={item.title}
+                  type="button"
+                  className={index === activeProject ? styles.activeNumber : undefined}
+                  aria-label={`Mostrar projeto ${index + 1}: ${item.title}`}
+                  aria-current={index === activeProject ? "true" : undefined}
+                  onClick={() => goTo(index)}
+                >
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <small>{item.title}</small>
+                </button>
+              ))}
+            </div>
+            <div className={styles.carouselControls}>
+              <button type="button" onClick={() => goTo(activeProject - 1)} aria-label="Projeto anterior"><ArrowLeft /></button>
+              <button type="button" onClick={() => goTo(activeProject + 1)} aria-label="Próximo projeto"><ArrowRight /></button>
+            </div>
+          </div>
+          <a className={styles.scrollCue} href="#sobre">
+            Descubra nossa Casa <ChevronDown aria-hidden="true" />
+          </a>
+        </section>
+
+        <section className={styles.about} id="sobre" aria-labelledby="about-title">
+          <div className={styles.aboutIntro}>
+            <div className={styles.sectionLabel}>Acolhimento que transforma</div>
+            <h2 id="about-title">Uma Casa feita de presença, cuidado e serviço.</h2>
+            <Dialog.Root>
+              <figure className={styles.aboutPhoto}>
+                <Dialog.Trigger asChild>
+                  <button className={styles.aboutPhotoTrigger} type="button" aria-label="Ampliar foto da Gira da Mata 2025">
+                    <img
+                      src="/casa-sol/comunidade-casa-sol.jpg"
+                      alt="Comunidade da Casa Sol do Oriente reunida em uma celebração ao ar livre"
+                      width="1800"
+                      height="1200"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </button>
+                </Dialog.Trigger>
+                <figcaption>Morretes, corrente mediúnica na Gira da Mata 2025.</figcaption>
+              </figure>
+              <Dialog.Portal>
+                <Dialog.Overlay className={styles.photoLightboxOverlay} />
+                <Dialog.Content className={styles.photoLightbox} aria-describedby={undefined}>
+                  <img
+                    src="/casa-sol/comunidade-casa-sol.jpg"
+                    alt="Comunidade da Casa Sol do Oriente reunida na Gira da Mata de 2025"
+                    width="1800"
+                    height="1200"
+                  />
+                  <Dialog.Title>Morretes, corrente mediúnica na Gira da Mata 2025.</Dialog.Title>
+                  <Dialog.Close className={styles.photoLightboxClose} aria-label="Fechar foto ampliada">
+                    <X aria-hidden="true" />
+                  </Dialog.Close>
+                </Dialog.Content>
+              </Dialog.Portal>
+            </Dialog.Root>
+            <div className={styles.aboutCopy}>
+              <p>
+                Nossa Casa é muito mais do que um local para giras e cirurgias espirituais. Aqui,
+                trabalhamos para oferecer projetos e iniciativas sociais que dão suporte à comunidade.
+              </p>
+              <p>
+                Nossa missão é transformar vidas e proporcionar um espaço de acolhimento e esperança.
+                Consulte as datas dos próximos encontros e venha fazer parte dessa jornada de amor e
+                solidariedade.
+              </p>
+              <a className={styles.outlineButton} href="/historia">
+                Conheça nossa história <ArrowRight aria-hidden="true" />
+              </a>
+            </div>
+          </div>
+
+          <div className={styles.valuesSection} aria-labelledby="values-title">
+            <div className={styles.sectionLabel}>Valores</div>
+            <h2 id="values-title" className={styles.valuesTitle}>O que orienta nossa caminhada.</h2>
+            <div className={styles.values}>
+              <article>
+                <Sun aria-hidden="true" />
+                <h3>Expansão da consciência</h3>
+                <p>Aprender, despertar e aprofundar a conexão consigo, com o próximo e com o sagrado.</p>
+              </article>
+              <article>
+                <Heart aria-hidden="true" />
+                <h3>Altruísmo</h3>
+                <p>Colocar conhecimento, tempo e cuidado a serviço do bem-estar de toda a comunidade.</p>
+              </article>
+              <article>
+                <Hand aria-hidden="true" />
+                <h3>Não violência</h3>
+                <p>Agir com respeito, escuta e responsabilidade, acolhendo cada pessoa e sua jornada.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section className={styles.testimonials} aria-labelledby="testimonials-title">
+          <div className={styles.testimonialsHeader}>
+            <span className={styles.sectionLabel}>Depoimentos</span>
+            <h2 id="testimonials-title">O que dizem sobre a Casa.</h2>
+            <p>Experiências compartilhadas por pessoas que encontraram acolhimento, cuidado e conexão na Casa SOL.</p>
+          </div>
+          <div className={styles.testimonialGrid}>
+            {googleReviews.map((review) => (
+              <article className={styles.testimonialCard} key={review.author}>
+                <div className={styles.reviewStars} aria-label="Avaliação de 5 estrelas">
+                  {Array.from({ length: 5 }, (_, index) => <Star key={index} aria-hidden="true" />)}
+                </div>
+                <blockquote>“{review.quote}”</blockquote>
+                <footer>
+                  <CircleUserRound aria-hidden="true" />
+                  <div>
+                    <strong>{review.author}</strong>
+                    <span>Avaliação publicada no Google</span>
+                  </div>
+                </footer>
+              </article>
+            ))}
+          </div>
+          <a className={styles.reviewsLink} href={googleMapsUrl} target="_blank" rel="noreferrer">
+            Ver avaliações no Google <ArrowRight aria-hidden="true" />
+          </a>
+        </section>
+
+        <section className={styles.visit} aria-labelledby="visit-title">
+          <div>
+            <span className={styles.sectionLabel}>Próximo passo</span>
+            <h2 id="visit-title">Venha conhecer a Casa SOL.</h2>
+            <p>Confira nossa agenda para encontrar giras, projetos sociais e atividades abertas ao público.</p>
+          </div>
+          <a className={styles.sunButton} href="/calendario">
+            Abrir calendário <ArrowRight aria-hidden="true" />
+          </a>
+        </section>
+      </main>
+
+      <footer className={styles.footer}>
+        <div className={styles.footerMain}>
+          <div className={styles.footerBrand}>
+            <img src="/casa-sol/logo.png" alt="Casa Sol do Oriente" />
+            <a href="https://maps.app.goo.gl/fiymuvcitenE4DKF7" target="_blank" rel="noreferrer">
+              <MapPin aria-hidden="true" />
+              <span>Rua Francisco Nunes, 437<br />Rebouças · Curitiba / PR</span>
+            </a>
+          </div>
+          <div className={styles.footerColumn}>
+            <strong>Casa SOL</strong>
+            <a href="/historia">Nossa história</a>
+            <a href="/ritualistica">Ritualística</a>
+            <a href="/projetos">Projetos</a>
+            <a href="/musicalidade">Musicalidade</a>
+          </div>
+          <div className={styles.footerColumn}>
+            <strong>Participe</strong>
+            <a href="/calendario">Calendário</a>
+            <a href="/ingresso">Ingresso</a>
+            <a href="/gira">Gira de segunda</a>
+            <a href="/projetos/hospital-terapeutico">Hospital Terapêutico</a>
+          </div>
+          <div className={styles.footerColumn}>
+            <strong>Conecte-se</strong>
+            <a href="https://www.instagram.com/casasoldooriente/" target="_blank" rel="noreferrer">
+              <AtSign aria-hidden="true" /> Instagram
+            </a>
+          </div>
+        </div>
+        <div className={styles.footerBottom}>
+          <small>© {new Date().getFullYear()} Casa Universalista Sol do Oriente.</small>
+          <a className={styles.footerCredit} href="http://www.tatiramos.com.br" target="_blank" rel="noreferrer">Desenvolvido por @tatiramos</a>
+          <span>Curitiba · Paraná</span>
+        </div>
+      </footer>
+    </div>
+  );
 }
-function Tip({text,children}:{text:string;children:React.ReactNode}){return <Tooltip.Root><Tooltip.Trigger asChild>{children}</Tooltip.Trigger><Tooltip.Portal><Tooltip.Content className="tooltip" sideOffset={6}>{text}</Tooltip.Content></Tooltip.Portal></Tooltip.Root>}
-function EventCard({item,onClick,mobile=false}:{item:Item;onClick:()=>void;mobile?:boolean}){const cat=cats[item.cat],Icon=cat.Icon;return <motion.button layout initial={{opacity:0,y:5}} animate={{opacity:1,y:0}} exit={{opacity:0,scale:.96}} whileHover={{y:-1}} className={`${mobile?"mobile-event":"event"} ${cat.color}`} onClick={onClick}><span><Icon/><b>{item.title}</b></span><small><Clock3/>{item.time}</small></motion.button>}
