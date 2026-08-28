@@ -41,3 +41,6 @@ google-credentials*.json
 /.wrangler/
 /outputs/
 /work/
+
+# Arquivos grandes (acima de 50MB) — usar Git LFS se necessário
+_old/**/*.psd
