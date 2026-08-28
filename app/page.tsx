@@ -225,7 +225,7 @@ export default function Home() {
                       <strong>
                         {upcomingProjectDates[project.dateKey]
                           ? formatProjectDate(
-                              upcomingProjectDates[project.dateKey],
+                              upcomingProjectDates[project.dateKey]!,
                             )
                           : "Aguardando nova data"}
                       </strong>
