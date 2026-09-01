@@ -150,19 +150,23 @@
 }
 .projectImage { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; opacity: 0; transform: scale(1.025); transition: opacity 700ms ease, transform 10s linear; }
 .projectImageActive { opacity: 1; transform: scale(1); }
-.carouselRail { position: absolute; z-index: 5; left: 50%; bottom: 38px; translate: -50% 0; width: min(1320px, calc(100% - max(8vw, 64px))); display: flex; align-items: flex-end; gap: 32px; }
-.numberedNav { min-width: 0; flex: 1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.numberedNav button { position: relative; min-height: 64px; display: flex; align-items: center; gap: 12px; padding: 16px 16px 0 0; border: 0; background: transparent; color: rgb(255 255 255 / .55); text-align: left; }
+/* Mesmos limites de .heroContent (padding do .hero + teto de 1320px) para que
+   as tabs comecem exatamente na coluna do card de data e do botão acima. */
+.carouselRail { position: absolute; z-index: 5; left: max(4vw, 32px); right: max(4vw, 32px); bottom: 38px; translate: none; width: auto; max-width: 1320px; margin-inline: auto; display: flex; align-items: center; gap: 32px; }
+.numberedNav { min-width: 0; flex: 1; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.numberedNav button { position: relative; min-height: 88px; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 16px 16px 0 0; border: 0; background: transparent; color: rgb(255 255 255 / .55); text-align: left; }
 .numberedNav button::before,.numberedNav button::after { content:""; position:absolute; left:0; right:16px; top:-1px; height:3px; border-radius:999px; }
 .numberedNav button::before { background:rgb(255 255 255 / .58); }
 .numberedNav button::after { background:var(--home-sun); transform:scaleX(0); transform-origin:left center; }
 .numberedNav button span { font: 700 20px/1 var(--font-sans), sans-serif; }
-.numberedNav button small { overflow: hidden; color: inherit; font-size: 13px; font-weight: 700; line-height: 1.25; text-overflow: ellipsis; white-space: nowrap; }
+.numberedNav button small { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; color: inherit; font-size: 13px; font-weight: 700; line-height: 1.3; white-space: normal; overflow-wrap: break-word; text-wrap: balance; }
 .numberedNav .activeNumber { color: #fff; }
 .numberedNav .activeNumber::after { animation:carousel-progress 10s linear forwards; }
 .carouselRail[data-paused] .activeNumber::after { animation-play-state:paused; }
 @keyframes carousel-progress { to { transform:scaleX(1); } }
-.carouselControls { display: flex; gap: 8px; flex: none; }
+/* Reserva a faixa do botão flutuante do WhatsApp (58px + respiro) para que ele
+   nunca fique sobreposto a um controle clicável do carrossel. */
+.carouselControls { display: flex; gap: 8px; flex: none; margin-right: 78px; }
 .carouselControls button { width: 42px; height: 42px; display: grid; place-items: center; border: 1px solid rgb(255 255 255 / .38); border-radius: 50%; background: rgb(7 25 32 / .48); color: #fff; backdrop-filter: blur(10px); }
 .carouselControls button:hover { border-color: #fff; background: rgb(7 25 32 / .72); }
 .carouselControls svg { width: 18px; }
@@ -230,7 +234,13 @@
 .reviewsLink:hover svg { transform:translateX(3px); }
 
 .footer { display: block; padding: 0 max(7vw, 48px); border: 0; background: #0d3348; color: rgb(255 255 255 / 0.68); }
-.footerMain { width: min(1200px, 100%); margin: auto; display: grid; grid-template-columns: minmax(260px, 1.5fr) repeat(3, minmax(130px, 0.65fr)); align-items: start; gap: 56px; padding: 64px 0 48px; }
+.footerMain { width: min(1200px, 100%); margin: auto; display: grid; grid-template-columns: minmax(260px, 1.5fr) repeat(3, minmax(130px, 0.65fr)); align-items: start; gap: clamp(28px, 4vw, 56px); padding: 64px 0 48px; }
+/* As 4 colunas têm piso rígido (260 + 3x130 + gaps). Abaixo do desktop elas não
+   cabem no container e transbordam, então o footer passa a 2 colunas já no tablet. */
+@media (max-width: 1023px) {
+  .footerMain { grid-template-columns: 1fr 1fr; gap: 40px 28px; }
+  .footerBrand { grid-column: 1 / -1; }
+}
 .footerBrand img { display: block; width: 190px; height: auto; }
 .footerBrand > a { display: flex; align-items: flex-start; gap: 10px; width: fit-content; margin-top: 24px; color: rgb(255 255 255 / 0.72) !important; font-size: 13px; line-height: 1.6; text-decoration: none; }
 .footerBrand > a svg { flex: none; width: 17px; height: 17px; margin-top: 2px; color: var(--home-sun); }
@@ -240,6 +250,12 @@
 .footerColumn a:hover { color: #fff !important; }
 .footerColumn svg { width: 15px; height: 15px; color: var(--home-sun); }
 .footerBottom { width: min(1200px, 100%); min-height: 68px; margin: auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; border-top: 1px solid rgb(255 255 255 / 0.12); }
+/* Reserva a faixa do botao flutuante do WhatsApp para que ele nunca cubra o
+   credito ou a localizacao na linha final do footer. */
+@media (max-width: 1219px) {
+  .footerBottom { padding-right: 78px; }
+}
+
 .footerBottom small, .footerBottom span { font-size: 11px; }
 .footerCredit { color:rgb(255 255 255 / .68)!important; font-size:11px; text-decoration:none; }
 .footerCredit:hover { color:#fff!important; text-decoration:underline; text-underline-offset:3px; }
@@ -266,7 +282,9 @@
   .heroContent { grid-template-columns: 1fr; gap: 48px; }
   .heroCopy { max-width: 760px; padding-top: 24px; }
   .carousel { width: auto; margin: 0; }
-  .carouselRail { position: relative; left: auto; bottom: auto; translate: none; width: 100%; max-width: 100%; gap: 16px; padding: 0 max(4vw, 32px) 40px; }
+  /* Aqui a barra volta ao fluxo do .hero, que já aplica o padding lateral.
+     Repeti-lo dobraria o recuo e desalinharia as tabs do card de data acima. */
+  .carouselRail { position: relative; left: auto; right: auto; bottom: auto; translate: none; width: 100%; max-width: 100%; margin-inline: 0; gap: 16px; padding: 0 0 40px; }
 }
 
 @media (max-width: 720px) {
@@ -281,6 +299,7 @@
   .missionStatement { margin-top: 36px; }
   .carouselRail { position:absolute; left:0; right:0; bottom:16px; align-items:center; width:100%; padding:0 20px; }
   .numberedNav button { min-height: 52px; padding-right: 8px; }
+  .numberedNav button { min-height: 52px; gap: 0; }
   .numberedNav button small { display: none; }
   .numberedNav button::before, .numberedNav button::after { right: 8px; }
   .carouselControls button { width: 40px; height: 40px; }

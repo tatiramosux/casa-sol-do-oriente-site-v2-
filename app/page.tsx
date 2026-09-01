@@ -25,41 +25,71 @@ import { RitualisticaMenu } from "../components/ritualistica-menu";
 
 const projects = [
   {
+    title: "Palestra com Prof. Wagner Borges",
+    badge: "Evento",
+    eyebrow: "Parceria Editora KOI",
+    image: "/casa-sol/projeto-5.webp",
+    href: "https://wagnerborges.koieditora.com.br/",
+    external: true,
+    actionLabel: "Saiba mais",
+    dateKey: null,
+    fixedDate: "09, 10 e 11 de outubro",
+    alt: "Altar da Casa Sol do Oriente iluminado, com o hexagrama e a espada ao centro",
+    description:
+      "Esse evento é realizado em parceria com a Editora KOI. A editora administra todas as informações do evento.",
+  },
+  {
     title: "Hospital Terapêutico",
+    badge: "Projeto social",
     eyebrow: "Terapias integrativas",
     image: "/casa-sol/banner-hospital.webp",
     href: "/projetos/hospital-terapeutico",
+    external: false,
+    actionLabel: "Conheça o projeto",
     dateKey: "hospital",
+    fixedDate: null,
     alt: "Arte do projeto Hospital Terapêutico da Casa Sol do Oriente",
     description:
       "Terapias complementares e suporte psicológico oferecidos à comunidade por uma rede de terapeutas voluntários.",
   },
   {
     title: "A vida continua",
+    badge: "Projeto social",
     eyebrow: "Acolhimento ao luto",
     image: "/casa-sol/projeto-4-hd.jpg",
     href: "/projetos/a-vida-continua",
+    external: false,
+    actionLabel: "Conheça o projeto",
     dateKey: "griefSupport",
+    fixedDate: null,
     alt: "Arte do projeto A Vida Continua, da Casa Sol do Oriente",
     description:
       "Um espaço seguro de escuta para quem atravessa o luto — pela perda de uma pessoa, uma relação, um sonho ou uma grande mudança de vida.",
   },
   {
     title: "Firmando os trabalhos",
+    badge: "Projeto social",
     eyebrow: "Rede de apoio",
     image: "/casa-sol/projeto-3-hd.jpg",
     href: "/projetos/firmando-os-trabalhos",
+    external: false,
+    actionLabel: "Conheça o projeto",
     dateKey: null,
+    fixedDate: null,
     alt: "Arte do projeto Firmando os Trabalhos da Casa Sol do Oriente",
     description:
       "Uma rede que aproxima profissionais, empreendedores e a comunidade para compartilhar oportunidades e fortalecer novos caminhos.",
   },
   {
     title: "Pão solidário da Vó Margarida",
+    badge: "Projeto social",
     eyebrow: "Ação comunitária",
     image: "/casa-sol/projeto-2-hd.jpg",
     href: "/projetos/pao-solidario",
+    external: false,
+    actionLabel: "Conheça o projeto",
     dateKey: null,
+    fixedDate: null,
     alt: "Arte do projeto Pão Solidário da Vó Margarida",
     description:
       "Médiuns voluntários preparam e distribuem pães à comunidade dos arredores da Casa, levando alimento, presença e cuidado.",
@@ -207,12 +237,21 @@ export default function Home() {
           <div className={styles.heroContent}>
             <div className={styles.heroCopy} aria-live="polite" aria-atomic="true">
               <div className={styles.eyebrow}>
-                Projetos sociais
+                {project.badge}
               </div>
               <span className={styles.heroProjectLabel}>{project.eyebrow}</span>
               <h1 id="hero-title" key={project.title}>{project.title}</h1>
               <p key={project.description}>{project.description}</p>
               <div className={styles.heroActions}>
+                {project.fixedDate && (
+                  <div className={styles.upcomingDate}>
+                    <CalendarDays aria-hidden="true" />
+                    <span>
+                      <small>Data</small>
+                      <strong>{project.fixedDate}</strong>
+                    </span>
+                  </div>
+                )}
                 {project.dateKey && upcomingProjectDates && (
                   <div
                     className={styles.upcomingDate}
@@ -235,22 +274,25 @@ export default function Home() {
                 <a
                   className={styles.textButton}
                   href={project.href}
+                  {...(project.external
+                    ? { target: "_blank", rel: "noreferrer" }
+                    : {})}
                 >
-                  Conheça o projeto
+                  {project.actionLabel}
                   <ArrowRight aria-hidden="true" />
                 </a>
               </div>
             </div>
 
           </div>
-          <div className={styles.carouselRail} data-paused={paused || undefined} aria-label="Selecionar projeto">
+          <div className={styles.carouselRail} data-paused={paused || undefined} aria-label="Selecionar destaque">
             <div className={styles.numberedNav}>
               {projects.map((item, index) => (
                 <button
                   key={item.title}
                   type="button"
                   className={index === activeProject ? styles.activeNumber : undefined}
-                  aria-label={`Mostrar projeto ${index + 1}: ${item.title}`}
+                  aria-label={`Mostrar ${item.badge.toLocaleLowerCase("pt-BR")} ${index + 1}: ${item.title}`}
                   aria-current={index === activeProject ? "true" : undefined}
                   onClick={() => goTo(index)}
                 >

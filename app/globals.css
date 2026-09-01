@@ -43,6 +43,9 @@
 .page-loading-cards[data-columns="2"] { grid-column:3 / span 8; grid-template-columns:repeat(2,minmax(0,1fr)); }
 .page-loading-cards[data-columns="1"] { grid-column:3 / span 8; grid-template-columns:1fr; }
 .page-loading-cards div { height:180px; border-radius:16px; }
+/* Páginas cujo primeiro grupo é um accordion (FAQ, ofertas): linhas, não cards. */
+.page-loading-cards[data-shape="row"],.page-loading-cards[data-shape="row"][data-columns] { gap:0; grid-template-columns:1fr; }
+.page-loading-cards[data-shape="row"] div { height:64px; border-radius:0; border-bottom:1px solid #e4e7e4; }
 .page-loading-eyebrow,.page-loading-title,.page-loading-subtitle span { background:linear-gradient(90deg,rgb(255 255 255 / .1) 25%,rgb(255 255 255 / .24) 50%,rgb(255 255 255 / .1) 75%); background-size:200% 100%; animation:page-loading-shimmer 1.35s ease-in-out infinite; }
 .page-loading-section-label,.page-loading-section-title,.page-loading-section-text span,.page-loading-cards div { background:linear-gradient(90deg,#e7eae7 25%,#f7f8f6 50%,#e7eae7 75%); background-size:200% 100%; animation:page-loading-shimmer 1.35s ease-in-out infinite; }
 @keyframes page-loading-shimmer { to { background-position:-200% 0; } }
@@ -64,7 +67,7 @@ body {
   position: fixed;
   right: max(20px, env(safe-area-inset-right));
   bottom: max(20px, env(safe-area-inset-bottom));
-  z-index: 45;
+  z-index: 60;
   width: 58px;
   height: 58px;
   display: inline-flex;
@@ -1387,7 +1390,13 @@ button {
   background: #0d3348;
   color: rgb(255 255 255 / 0.7);
 }
-.calendar-footer-main { width: min(1200px, 100%); margin: auto; display: grid; grid-template-columns: minmax(260px, 1.5fr) repeat(3, minmax(130px, 0.65fr)); align-items: start; gap: 56px; padding: 64px 0 48px; }
+.calendar-footer-main { width: min(1200px, 100%); margin: auto; display: grid; grid-template-columns: minmax(260px, 1.5fr) repeat(3, minmax(130px, 0.65fr)); align-items: start; gap: clamp(28px, 4vw, 56px); padding: 64px 0 48px; }
+/* As 4 colunas têm piso rígido (260 + 3x130 + gaps) e não cabem abaixo do
+   desktop; o footer passa a 2 colunas já no tablet, como nas demais páginas. */
+@media (max-width: 1023px) {
+  .calendar-footer-main { grid-template-columns: 1fr 1fr; gap: 40px 28px; }
+  .calendar-footer-brand { grid-column: 1 / -1; }
+}
 .calendar-footer-brand { display: block; color: inherit; }
 .calendar-footer-brand img { display: block; width: 190px; height: auto; }
 .calendar-footer-brand a { display:flex; align-items:flex-start; gap:10px; width:fit-content; margin-top:24px; color:rgb(255 255 255 / .72); font-size:13px; line-height:1.6; text-decoration:none; }
@@ -1399,6 +1408,12 @@ button {
 .calendar-footer-column a svg { width:16px; height:16px; flex:none; color:var(--brand-sun); }
 .calendar-footer-column a:hover { color: #fff; }
 .calendar-footer-bottom { width: min(1200px, 100%); min-height: 68px; margin: auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; border-top: 1px solid rgb(255 255 255 / 0.12); }
+/* Reserva a faixa do botao flutuante do WhatsApp para que ele nunca cubra o
+   credito ou a localizacao na linha final do footer. */
+@media (max-width: 1219px) {
+  .calendar-footer-bottom { padding-right: 78px; }
+}
+
 .calendar-footer-bottom small, .calendar-footer-bottom span { font-size: 11px; }
 .calendar-footer-credit { color:rgb(255 255 255 / .68); font-size:11px; text-decoration:none; }
 .calendar-footer-credit:hover { color:#fff; text-decoration:underline; text-underline-offset:3px; }

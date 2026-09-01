@@ -236,6 +236,8 @@ Usar sombra apenas para comunicar elevação. Cards de conteúdo comuns preferem
 
 - O skeleton deve espelhar a arquitetura da página de destino, e não usar uma contagem genérica: navbar com todos os itens atuais, hero com label, título e descrição, seguida pela quantidade e pelas colunas reais do primeiro grupo de cards ou blocos.
 - No mobile, a estrutura muda para menu, logotipo e dois botões de ícone; cards e blocos passam para uma coluna, mantendo a mesma quantidade da página de destino.
+- O primeiro grupo também define a **forma** dos blocos. Páginas cujo primeiro grupo é um grid de cards usam blocos de 180 px com raio de 16 px; páginas cujo primeiro grupo é um accordion (FAQ da Gira, ofertas do Amalá) usam linhas de 64 px, sem raio, separadas apenas por divisor inferior, em coluna única em todos os breakpoints — espelhando o padrão do próprio accordion.
+- Cada rota tem um perfil declarado em `components/page-loading-skeleton.tsx`. Ao criar uma página nova ou alterar a quantidade de itens do primeiro grupo, atualizar o perfil correspondente no mesmo trabalho.
 
 ### WhatsApp flutuante
 
