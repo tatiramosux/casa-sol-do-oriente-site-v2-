@@ -1385,7 +1385,8 @@ button {
 .calendar-page .notice a:hover { background:#ffc234; }
 .calendar-site-footer {
   display: block;
-  padding: 0 max(7vw, 48px);
+  /* 20px ao final para o texto do rodape nao encostar na borda da viewport. */
+  padding: 0 max(7vw, 48px) 20px;
   border: 0;
   background: #0d3348;
   color: rgb(255 255 255 / 0.7);
