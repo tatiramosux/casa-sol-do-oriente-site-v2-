@@ -30,7 +30,8 @@
 .historyEntities li::before { position:absolute; top:.62em; left:0; width:6px; height:6px; border-radius:50%; background:#e99a00; content:""; transform:translateY(-50%); }
 .historyEntities strong { color:#1d292f; font-weight:700; }
 .cta { display:flex; align-items:center; justify-content:space-between; gap:48px; padding:64px max(7vw,48px); background:#174b68; color:#fff; }.cta h2 { color:#fff; }.cta p { max-width:650px; margin:14px 0 0; color:rgb(255 255 255 / .72); line-height:1.65; }.primaryButton { flex:none; min-height:48px; background:#ffb100; color:#3a2600; padding-inline:22px; }.outlineButton { width:fit-content; margin-top:20px; border:1px solid #174b68; color:#174b68; }.sectionNarrow > .outlineButton { display:flex; margin-left:auto; margin-right:auto; }
-.footer { display:block; padding:0 max(7vw,48px); background:#0d3348; color:rgb(255 255 255 / .68); }.footerMain { width:min(1200px,100%); margin:auto; display:grid; grid-template-columns:minmax(260px,1.5fr) repeat(3,minmax(130px,.65fr)); align-items:start; gap:clamp(28px,4vw,56px); padding:64px 0 48px; }
+/* 20px ao final para o texto do rodape nao encostar na borda da viewport. */
+.footer { display:block; padding:0 max(7vw,48px) 20px; background:#0d3348; color:rgb(255 255 255 / .68); }.footerMain { width:min(1200px,100%); margin:auto; display:grid; grid-template-columns:minmax(260px,1.5fr) repeat(3,minmax(130px,.65fr)); align-items:start; gap:clamp(28px,4vw,56px); padding:64px 0 48px; }
 /* Ver page.module.css: as 4 colunas não cabem abaixo do desktop; 2 colunas no tablet. */
 @media (max-width:1023px){.footerMain{grid-template-columns:1fr 1fr;gap:40px 28px}.footerBrand{grid-column:1/-1}}
 /* Reserva a faixa do botão flutuante do WhatsApp para que ele nunca cubra o

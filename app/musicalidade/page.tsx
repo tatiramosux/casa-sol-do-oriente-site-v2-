@@ -1,4 +1,4 @@
-import { BookOpen, CirclePlay, Music2 } from "lucide-react";
+import { BookOpen, CirclePlay, Download, Music2 } from "lucide-react";
 import { InternalHero } from "../../components/internal-hero";
 import { SiteFooter, SiteHeader } from "../../components/site-chrome";
 import styles from "../internal.module.css";
@@ -13,7 +13,7 @@ const playlists = [
   ["Quimbanda", "Seleção de pontos relacionados aos trabalhos e fundamentos de Quimbanda da Casa.", "https://youtube.com/playlist?list=PLyQtzmZv-BuIdj0qvvU28IaUWLqSNB1v6"],
 ] as const;
 
-const bookletRequest = "https://wa.me/5541984247771?text=Ol%C3%A1%2C%20gostaria%20de%20solicitar%20a%20apostila%20de%20musicalidade%20da%20Casa%20SOL.";
+const bookletPdf = "/casa-sol/documentos/apostila-pontos-casa-sol-2026.pdf";
 
 const drumLessons = [
   ["Samba Cabula", "https://youtu.be/eEs6o8v4v9A"],
@@ -80,7 +80,7 @@ export default function Musicalidade() {
           <div className={`${styles.resourceGrid} ${styles.resourceGridSingle}`}>
             <article className={styles.resourceCard}>
               <BookOpen aria-hidden="true" />
-              <div><p className={styles.musicType}>Material de estudo</p><h3>Apostila do terreiro</h3><p>Solicite a apostila de musicalidade para acompanhar os pontos, fundamentos e orientações compartilhados pela Casa.</p><a className={styles.outlineButton} href={bookletRequest} target="_blank" rel="noreferrer">Solicitar a apostila</a></div>
+              <div><p className={styles.musicType}>Material de estudo</p><h3>Apostila do terreiro</h3><p>Baixe a apostila para acompanhar os pontos, fundamentos e orientações compartilhados pela Casa.</p><a className={styles.outlineButton} href={bookletPdf} download><Download aria-hidden="true" /> Download apostila de pontos</a></div>
             </article>
           </div>
         </section>

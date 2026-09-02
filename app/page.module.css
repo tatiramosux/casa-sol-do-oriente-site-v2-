@@ -233,7 +233,8 @@
 .reviewsLink svg { width:18px; height:18px; transition:transform 180ms ease; }
 .reviewsLink:hover svg { transform:translateX(3px); }
 
-.footer { display: block; padding: 0 max(7vw, 48px); border: 0; background: #0d3348; color: rgb(255 255 255 / 0.68); }
+/* 20px ao final para o texto do rodape nao encostar na borda da viewport. */
+.footer { display: block; padding: 0 max(7vw, 48px) 20px; border: 0; background: #0d3348; color: rgb(255 255 255 / 0.68); }
 .footerMain { width: min(1200px, 100%); margin: auto; display: grid; grid-template-columns: minmax(260px, 1.5fr) repeat(3, minmax(130px, 0.65fr)); align-items: start; gap: clamp(28px, 4vw, 56px); padding: 64px 0 48px; }
 /* As 4 colunas têm piso rígido (260 + 3x130 + gaps). Abaixo do desktop elas não
    cabem no container e transbordam, então o footer passa a 2 colunas já no tablet. */
