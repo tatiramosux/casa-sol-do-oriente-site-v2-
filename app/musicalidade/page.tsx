@@ -80,7 +80,7 @@ export default function Musicalidade() {
           <div className={`${styles.resourceGrid} ${styles.resourceGridSingle}`}>
             <article className={styles.resourceCard}>
               <BookOpen aria-hidden="true" />
-              <div><p className={styles.musicType}>Material de estudo</p><h3>Apostila do terreiro</h3><p>Baixe a apostila para acompanhar os pontos, fundamentos e orientações compartilhados pela Casa.</p><a className={styles.outlineButton} href={bookletPdf} download><Download aria-hidden="true" /> Download apostila de pontos</a></div>
+              <div><p className={styles.musicType}>Material de estudo</p><h3>Apostila do terreiro</h3><p>Baixe a apostila para acompanhar os pontos cantados e tocados em nossa Casa.</p><a className={styles.outlineButton} href={bookletPdf} download><Download aria-hidden="true" /> Download apostila de pontos</a></div>
             </article>
           </div>
         </section>
