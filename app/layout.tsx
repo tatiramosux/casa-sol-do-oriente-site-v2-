@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import "./globals.css";
 import { WhatsAppButton } from "../components/whatsapp-button";
@@ -45,5 +46,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="pt-BR"><body className={`${display.variable} ${sans.variable}`}><StructuredData />{children}<RouteTransition /><WhatsAppButton /><GoogleAnalytics /></body></html>;
+  return <html lang="pt-BR"><body className={`${display.variable} ${sans.variable}`}><StructuredData />{children}<RouteTransition /><WhatsAppButton /><GoogleAnalytics /><Analytics /></body></html>;
 }
