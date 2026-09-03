@@ -25,20 +25,6 @@ import { RitualisticaMenu } from "../components/ritualistica-menu";
 
 const projects = [
   {
-    title: "Palestra com Prof. Wagner Borges",
-    badge: "Evento",
-    eyebrow: "Parceria Editora KOI",
-    image: "/casa-sol/evento-wagner-borges.webp",
-    href: "https://wagnerborges.koieditora.com.br/",
-    external: true,
-    actionLabel: "Saiba mais",
-    dateKey: null,
-    fixedDate: "09, 10 e 11 de outubro",
-    alt: "Arte do evento Sakuras Espirituais, da Editora KOI, com o Prof. Wagner Borges",
-    description:
-      "Esse evento é realizado em parceria com a Editora KOI. A editora administra todas as informações do evento.",
-  },
-  {
     title: "Cirurgias espirituais",
     badge: "Atendimento gratuito à comunidade",
     eyebrow: "Atendimentos às segundas",
@@ -51,6 +37,20 @@ const projects = [
     alt: "Corrente mediúnica reunida durante a gira na Casa Sol do Oriente",
     description:
       "Um encontro de acolhimento, orientação e cuidado espiritual, aberto a quem busca atendimento na Casa.",
+  },
+  {
+    title: "Palestra com Prof. Wagner Borges",
+    badge: "Evento",
+    eyebrow: "Parceria Editora KOI",
+    image: "/casa-sol/evento-wagner-borges.webp",
+    href: "https://wagnerborges.koieditora.com.br/",
+    external: true,
+    actionLabel: "Saiba mais",
+    dateKey: null,
+    fixedDate: "09, 10 e 11 de outubro",
+    alt: "Arte do evento Sakuras Espirituais, da Editora KOI, com o Prof. Wagner Borges",
+    description:
+      "Esse evento é realizado em parceria com a Editora KOI. A editora administra todas as informações do evento.",
   },
   {
     title: "Hospital Terapêutico",
