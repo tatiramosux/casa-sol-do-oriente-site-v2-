@@ -210,7 +210,7 @@
    Usa o mesmo recurso de sangria total das demais faixas da home. */
 /* order 3 deixa a citacao depois do bloco com foto (order 2) e imediatamente
    antes da secao de depoimentos, que vem fora deste container. */
-.quoteSection { order: 3; margin: 0; padding: 72px 0; background: #f2f4f1; box-shadow: 0 0 0 100vmax #f2f4f1; clip-path: inset(0 -100vmax); }
+.quoteSection { order: 3; margin: 0; padding: 72px 0; background: var(--home-cream); box-shadow: 0 0 0 100vmax var(--home-cream); clip-path: inset(0 -100vmax); }
 /* Citacao serifada, negrito e italico, centrada, com a autoria abaixo. */
 .valuesQuote { max-width: 680px; margin: 0 auto; text-align: center; }
 .valuesQuote blockquote { margin: 0; color: var(--home-primary); font-family: Georgia, "Times New Roman", serif; font-size: clamp(22px, 2.4vw, 28px); font-style: italic; font-weight: 700; line-height: 1.35; text-wrap: balance; }
