@@ -1,6 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import {
   ArrowLeft,
@@ -34,6 +40,7 @@ const projects = [
     actionLabel: "Saiba mais",
     dateKey: "nextGira",
     fixedDate: null,
+    showUntil: null,
     alt: "Corrente mediúnica reunida durante a gira na Casa Sol do Oriente",
     description:
       "Um encontro de acolhimento, orientação e cuidado espiritual, aberto a quem busca atendimento na Casa.",
@@ -48,6 +55,9 @@ const projects = [
     actionLabel: "Saiba mais",
     dateKey: null,
     fixedDate: "09, 10 e 11 de outubro",
+    // Ultimo dia em que o slide aparece. Depois disso ele sai do carrossel
+    // sozinho e a numeracao dos demais se reorganiza.
+    showUntil: "2026-10-11",
     alt: "Arte do evento Sakuras Espirituais, da Editora KOI, com o Prof. Wagner Borges",
     description:
       "Esse evento é realizado em parceria com a Editora KOI. A editora administra todas as informações do evento.",
@@ -62,6 +72,7 @@ const projects = [
     actionLabel: "Conheça o projeto",
     dateKey: "hospital",
     fixedDate: null,
+    showUntil: null,
     alt: "Arte do projeto Hospital Terapêutico da Casa Sol do Oriente",
     description:
       "Terapias complementares e suporte psicológico oferecidos à comunidade por uma rede de terapeutas voluntários.",
@@ -76,6 +87,7 @@ const projects = [
     actionLabel: "Conheça o projeto",
     dateKey: "griefSupport",
     fixedDate: null,
+    showUntil: null,
     alt: "Arte do projeto A Vida Continua, da Casa Sol do Oriente",
     description:
       "Um espaço seguro de escuta para quem atravessa o luto — pela perda de uma pessoa, uma relação, um sonho ou uma grande mudança de vida.",
@@ -90,6 +102,7 @@ const projects = [
     actionLabel: "Conheça o projeto",
     dateKey: null,
     fixedDate: null,
+    showUntil: null,
     alt: "Arte do projeto Firmando os Trabalhos da Casa Sol do Oriente",
     description:
       "Uma rede que aproxima profissionais, empreendedores e a comunidade para compartilhar oportunidades e fortalecer novos caminhos.",
@@ -104,6 +117,7 @@ const projects = [
     actionLabel: "Conheça o projeto",
     dateKey: null,
     fixedDate: null,
+    showUntil: null,
     alt: "Arte do projeto Pão Solidário da Vó Margarida",
     description:
       "Médiuns voluntários preparam e distribuem pães à comunidade dos arredores da Casa, levando alimento, presença e cuidado.",
@@ -151,6 +165,10 @@ const googleReviews = [
   },
 ] as const;
 
+// A data do dispositivo nao muda sozinha durante a visita, entao nao ha o que
+// assinar: a store existe so para ler o valor no cliente sem quebrar a hidratacao.
+const subscribeToNothing = () => () => {};
+
 const googleMapsUrl = "https://www.google.com/maps/place/Casa+Sol+do+Oriente/@-25.4451668,-49.2570482,17z/data=!4m8!3m7!1s0x94dce567845c3b19:0x7897c51f987ed45f!8m2!3d-25.4451668!4d-49.2570482!9m1!1b1!16s%2Fg%2F11l2z0qzrp";
 
 export default function Home() {
@@ -159,19 +177,43 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [upcomingProjectDates, setUpcomingProjectDates] =
     useState<UpcomingProjectDates | null>(null);
+  // A data so existe no cliente: no servidor ela seria outra e causaria
+  // divergencia de hidratacao. Ate a hidratacao, o servidor devolve null e
+  // todos os slides aparecem.
+  const today = useSyncExternalStore(
+    subscribeToNothing,
+    () => new Date().toLocaleDateString("en-CA"),
+    () => null,
+  );
 
-  const goTo = useCallback((index: number) => {
-    setActiveProject((index + projects.length) % projects.length);
-  }, []);
+  // Slides com prazo saem do carrossel sozinhos depois de showUntil, e a
+  // numeracao dos demais se reorganiza porque vem da posicao na lista.
+  const visibleProjects = useMemo(
+    () =>
+      projects.filter(
+        (item) => !item.showUntil || today === null || item.showUntil >= today,
+      ),
+    [today],
+  );
+  // Se a lista encolher, o indice ativo pode ficar fora dela.
+  const currentIndex =
+    activeProject < visibleProjects.length ? activeProject : 0;
+
+  const goTo = useCallback(
+    (index: number) => {
+      setActiveProject((index + visibleProjects.length) % visibleProjects.length);
+    },
+    [visibleProjects.length],
+  );
 
   useEffect(() => {
     if (paused) return;
     const timer = window.setTimeout(
-      () => setActiveProject((current) => (current + 1) % projects.length),
+      () => setActiveProject((currentIndex + 1) % visibleProjects.length),
       10000,
     );
     return () => window.clearTimeout(timer);
-  }, [activeProject, paused]);
+  }, [currentIndex, paused, visibleProjects.length]);
 
   useEffect(() => {
     let cancelled = false;
@@ -186,7 +228,7 @@ export default function Home() {
     };
   }, []);
 
-  const project = projects[activeProject];
+  const project = visibleProjects[currentIndex] ?? visibleProjects[0];
 
   return (
     <div className={styles.siteShell}>
@@ -238,13 +280,13 @@ export default function Home() {
               if (!event.currentTarget.contains(event.relatedTarget)) setPaused(false);
             }}
           >
-            {projects.map((item, index) => (
+            {visibleProjects.map((item, index) => (
               <img
                 key={item.title}
-                className={`${styles.projectImage} ${index === activeProject ? styles.projectImageActive : ""}`}
+                className={`${styles.projectImage} ${index === currentIndex ? styles.projectImageActive : ""}`}
                 src={item.image}
-                alt={index === activeProject ? item.alt : ""}
-                aria-hidden={index !== activeProject}
+                alt={index === currentIndex ? item.alt : ""}
+                aria-hidden={index !== currentIndex}
               />
             ))}
           </div>
@@ -301,13 +343,13 @@ export default function Home() {
           </div>
           <div className={styles.carouselRail} data-paused={paused || undefined} aria-label="Selecionar destaque">
             <div className={styles.numberedNav}>
-              {projects.map((item, index) => (
+              {visibleProjects.map((item, index) => (
                 <button
                   key={item.title}
                   type="button"
-                  className={index === activeProject ? styles.activeNumber : undefined}
+                  className={index === currentIndex ? styles.activeNumber : undefined}
                   aria-label={`Mostrar ${item.badge.toLocaleLowerCase("pt-BR")} ${index + 1}: ${item.title}`}
-                  aria-current={index === activeProject ? "true" : undefined}
+                  aria-current={index === currentIndex ? "true" : undefined}
                   onClick={() => goTo(index)}
                 >
                   <span>{String(index + 1).padStart(2, "0")}</span>
@@ -316,8 +358,8 @@ export default function Home() {
               ))}
             </div>
             <div className={styles.carouselControls}>
-              <button type="button" onClick={() => goTo(activeProject - 1)} aria-label="Projeto anterior"><ArrowLeft /></button>
-              <button type="button" onClick={() => goTo(activeProject + 1)} aria-label="Próximo projeto"><ArrowRight /></button>
+              <button type="button" onClick={() => goTo(currentIndex - 1)} aria-label="Projeto anterior"><ArrowLeft /></button>
+              <button type="button" onClick={() => goTo(currentIndex + 1)} aria-label="Próximo projeto"><ArrowRight /></button>
             </div>
           </div>
           <a className={styles.scrollCue} href="#sobre">
@@ -379,6 +421,13 @@ export default function Home() {
               </a>
             </div>
           </div>
+
+          <section className={styles.quoteSection} aria-label="Citação">
+            <figure className={styles.valuesQuote}>
+              <blockquote>“O Caminho da Luz não tem volta!”</blockquote>
+              <figcaption>Sathya Sai Baba</figcaption>
+            </figure>
+          </section>
 
           <div className={styles.valuesSection} aria-labelledby="values-title">
             <div className={styles.sectionLabel}>Valores</div>
