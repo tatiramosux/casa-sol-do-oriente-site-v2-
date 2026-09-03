@@ -37,6 +37,12 @@ export async function GET() {
         title.includes("a vida continua")
       );
     });
+    // Proxima gira com atendimento na Casa. Giras externas ficam de fora porque
+    // nao oferecem o atendimento de segunda descrito na pagina /gira.
+    const nextGira = events.find(
+      (event) =>
+        event.category === "giras" && !normalizedTitle(event).includes("externa"),
+    );
 
     return NextResponse.json(
       {
@@ -44,6 +50,7 @@ export async function GET() {
         dates: {
           hospital: hospital?.start,
           griefSupport: griefSupport?.start,
+          nextGira: nextGira?.start,
         },
       },
       { headers: { "Cache-Control": "no-store" } },

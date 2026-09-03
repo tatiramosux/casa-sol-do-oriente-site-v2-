@@ -10,7 +10,7 @@ export default function Historia() {
         <InternalHero
           eyebrow="Sobre a Casa"
           title="Nossa história"
-          description="Uma caminhada de ancestralidade, aprendizado e serviço que encontrou no Sol do Oriente um lugar para acolher e transformar."
+          description="Uma caminhada de ancestralidade, aprendizados e altruísmo que encontrou no Sol do Oriente a união entre a força Ocidental e a sabedoria do Oriente a serviço da cura e da transformação."
           image="/casa-sol/banner-historia.webp"
         />
         <section className={styles.section}>
@@ -32,7 +32,7 @@ export default function Historia() {
                   />
                   </figure>
                   <h3>Mãe Roberta de Iemanjá</h3>
-                  <p>Caminha na Umbanda desde 2008 e é filha de Pai Jussaro de Ogum, do Terreiro do Pai Maneco. Sua trajetória espiritual também a levou à Índia, onde aprofundou seus conhecimentos sobre as tradições Hare Krishna, o Yoga e as terapias integrativas, experiências que contribuíram para ampliar sua visão e seu caminho dentro da espiritualidade.</p>
+                  <p>Caminha na Umbanda desde 2008 e é filha de Pai Jussaro de Ogum, do Terreiro do Pai Maneco. Sua trajetória espiritual também a levou à Índia, onde, por meio do Mestre Sathya Sai Baba, aprofundou os conhecimentos sobre a Bhagavad Gita e os valores humanos, experiências que contribuíram para ampliar a sua visão e caminho dentro da espiritualidade.</p>
                   <div className={styles.historyEntities}>
                     <h4>Entidades de trabalho</h4>
                     <ul>
@@ -42,12 +42,13 @@ export default function Historia() {
                       <li><strong>Preto-velho(a):</strong> Vovó Margarida</li>
                       <li><strong>Erê:</strong> Mariazinha</li>
                       <li><strong>Baiano:</strong> Maria do Tacho</li>
-                      <li><strong>Marinheiro:</strong> Umberto</li>
+                      <li><strong>Marinheiro:</strong> Tonho</li>
                       <li><strong>Boiadeiro:</strong> Seu Tião</li>
                       <li><strong>Cigana:</strong> Mama Rosa</li>
                       <li><strong>Oriente:</strong> Dr. Kiroto</li>
                       <li><strong>Exu:</strong> Tata Caveira e Tranca Rua das Almas</li>
                       <li><strong>Pomba-Gira:</strong> Maria Mulambro da Lixeira</li>
+                      <li><strong>Pomba-Gira Mirim:</strong> Menina da Praia</li>
                     </ul>
                   </div>
                 </article>
@@ -71,7 +72,7 @@ export default function Historia() {
                       <li><strong>Oxóssi:</strong> Caboclo Pena Verde</li>
                       <li><strong>Xangô:</strong> Caboclo Sete Trovoadas</li>
                       <li><strong>Preto-velho(a):</strong> Pai Dito</li>
-                      <li><strong>Erê:</strong> Pedrinho da Praia</li>
+                      <li><strong>Erê:</strong> Pedrinho</li>
                       <li><strong>Baiano:</strong> Negro Malandro do Pelourinho</li>
                       <li><strong>Marinheiro:</strong> Josué</li>
                       <li><strong>Boiadeiro:</strong> Luis</li>
@@ -89,7 +90,7 @@ export default function Historia() {
             <div className={styles.sectionHeader}>
               <p className={styles.sectionLabel}>Espiritualidade e serviço</p>
               <h2>Espiritualidade colocada a serviço.</h2>
-              <p>Além da tradição espiritual, a Casa SOL é comprometida com a caridade e o serviço à comunidade. Seus trabalhos são orientados pela expansão da consciência, pelo altruísmo e pela não violência.</p>
+              <p>Além da tradição espiritual, a Casa Sol é comprometida com a caridade e o serviço à comunidade. Seus trabalhos são orientados pela expansão da consciência, pelo altruísmo e pela não violência.</p>
               <p>Por meio das práticas religiosas, terapias e ações sociais, buscamos fortalecer laços espirituais e contribuir com o bem-estar de quem procura luz, acolhimento e sabedoria em seu caminho.</p>
             </div>
           </div>
