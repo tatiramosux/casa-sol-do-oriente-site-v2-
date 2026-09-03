@@ -4,7 +4,7 @@ import { FormEvent, KeyboardEvent, useEffect, useMemo, useRef, useState } from "
 import { ArrowRight, Search, X } from "lucide-react";
 
 const searchablePages = [
-  { title: "Início", description: "Casa SOL, valores, acolhimento e projetos sociais", href: "/", keywords: "casa sol endereço curitiba consciência altruísmo não violência" },
+  { title: "Início", description: "Casa Sol, valores, acolhimento e projetos sociais", href: "/", keywords: "casa sol endereço curitiba consciência altruísmo não violência" },
   { title: "Nossa história", description: "Trajetória, princípios e história da Casa", href: "/historia", keywords: "origem fundação memória valores" },
   { title: "Ritualística", description: "Práticas, atendimentos e caminhos espirituais", href: "/ritualistica", keywords: "ritual umbanda espiritualidade práticas" },
   { title: "Gira e perguntas frequentes", description: "Orientações para os atendimentos de segunda-feira", href: "/gira", keywords: "faq dúvidas cirurgia espiritual segunda inscrição atendimento" },

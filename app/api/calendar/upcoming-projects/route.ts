@@ -37,12 +37,9 @@ export async function GET() {
         title.includes("a vida continua")
       );
     });
-    // Proxima gira com atendimento na Casa. Giras externas ficam de fora porque
-    // nao oferecem o atendimento de segunda descrito na pagina /gira.
-    const nextGira = events.find(
-      (event) =>
-        event.category === "giras" && !normalizedTitle(event).includes("externa"),
-    );
+    // Proxima gira, qualquer que seja: as de segunda na Casa e tambem as
+    // especiais, como a Gira de Mata, que acontecem em outro dia ou local.
+    const nextGira = events.find((event) => event.category === "giras");
 
     return NextResponse.json(
       {

@@ -762,7 +762,7 @@ export default function Home() {
               </a>
             </div>
             <div className="calendar-footer-column">
-              <strong>Casa SOL</strong>
+              <strong>Casa Sol</strong>
               <a href="/historia">Nossa história</a>
               <a href="/ritualistica">Ritualística</a>
               <a href="/projetos">Projetos</a>
@@ -875,7 +875,7 @@ export default function Home() {
                         <p>
                           {isPaidPartnerEvent(selected)
                             ? "As inscrições e as informações complementares deste curso são administradas exclusivamente pela Editora KOI."
-                            : "Evento gratuito administrado pela Editora KOI. A Casa SOL apenas cede o espaço e não realiza reservas nem fornece informações adicionais."}
+                            : "Evento gratuito administrado pela Editora KOI. A Casa Sol apenas cede o espaço e não realiza reservas nem fornece informações adicionais."}
                         </p>
                       </div>
                     )}

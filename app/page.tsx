@@ -456,7 +456,7 @@ export default function Home() {
           <div className={styles.testimonialsHeader}>
             <span className={styles.sectionLabel}>Depoimentos</span>
             <h2 id="testimonials-title">O que dizem sobre a Casa.</h2>
-            <p>Experiências compartilhadas por pessoas que encontraram acolhimento, cuidado e conexão na Casa SOL.</p>
+            <p>Experiências compartilhadas por pessoas que encontraram acolhimento, cuidado e conexão na Casa Sol.</p>
           </div>
           <div className={styles.testimonialGrid}>
             {googleReviews.map((review) => (
@@ -483,7 +483,7 @@ export default function Home() {
         <section className={styles.visit} aria-labelledby="visit-title">
           <div>
             <span className={styles.sectionLabel}>Próximo passo</span>
-            <h2 id="visit-title">Venha conhecer a Casa SOL.</h2>
+            <h2 id="visit-title">Venha conhecer a Casa Sol.</h2>
             <p>Confira nossa agenda para encontrar giras, projetos sociais e atividades abertas ao público.</p>
           </div>
           <a className={styles.sunButton} href="/calendario">
@@ -502,7 +502,7 @@ export default function Home() {
             </a>
           </div>
           <div className={styles.footerColumn}>
-            <strong>Casa SOL</strong>
+            <strong>Casa Sol</strong>
             <a href="/historia">Nossa história</a>
             <a href="/ritualistica">Ritualística</a>
             <a href="/projetos">Projetos</a>

@@ -83,7 +83,7 @@ export default function Amala() {
             initialOpen={null}
           />
           <div className={styles.alert}>
-            Estas orientações registram a prática adotada pela Casa SOL. Em caso
+            Estas orientações registram a prática adotada pela Casa Sol. Em caso
             de dúvida, consulte a hierarquia antes de preparar ou realizar uma
             entrega.
           </div>
