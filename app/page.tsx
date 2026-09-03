@@ -39,6 +39,20 @@ const projects = [
       "Esse evento é realizado em parceria com a Editora KOI. A editora administra todas as informações do evento.",
   },
   {
+    title: "Cirurgias espirituais",
+    badge: "Atendimento gratuito à comunidade",
+    eyebrow: "Atendimentos às segundas",
+    image: "/casa-sol/banner-gira.webp",
+    href: "/gira",
+    external: false,
+    actionLabel: "Saiba mais",
+    dateKey: "nextGira",
+    fixedDate: null,
+    alt: "Corrente mediúnica reunida durante a gira na Casa Sol do Oriente",
+    description:
+      "Um encontro de acolhimento, orientação e cuidado espiritual, aberto a quem busca atendimento na Casa.",
+  },
+  {
     title: "Hospital Terapêutico",
     badge: "Projeto social",
     eyebrow: "Terapias integrativas",
@@ -349,13 +363,16 @@ export default function Home() {
             </Dialog.Root>
             <div className={styles.aboutCopy}>
               <p>
-                Nossa Casa é muito mais do que um local para giras e cirurgias espirituais. Aqui,
-                trabalhamos para oferecer projetos e iniciativas sociais que dão suporte à comunidade.
+                Nossa Casa é muito mais do que um local para giras e cirurgias espirituais, é um
+                espaço onde louvamos a Deus de forma universalista, respeitando diferentes formas de
+                culto e a crença individual de cada um. Aqui, trabalhamos para oferecer projetos e
+                iniciativas sociais que dão suporte à comunidade, sob o viés da cura de maneira
+                integrativa.
               </p>
               <p>
-                Nossa missão é transformar vidas e proporcionar um espaço de acolhimento e esperança.
-                Consulte as datas dos próximos encontros e venha fazer parte dessa jornada de amor e
-                solidariedade.
+                Nossa missão é lhe proporcionar um espaço seguro e sagrado onde você poderá trilhar a
+                sua cura e autodesenvolvimento. Consulte as datas dos próximos encontros e venha fazer
+                parte dessa jornada de amor e solidariedade.
               </p>
               <a className={styles.outlineButton} href="/historia">
                 Conheça nossa história <ArrowRight aria-hidden="true" />
@@ -370,17 +387,17 @@ export default function Home() {
               <article>
                 <Sun aria-hidden="true" />
                 <h3>Expansão da consciência</h3>
-                <p>Aprender, despertar e aprofundar a conexão consigo, com o próximo e com o sagrado.</p>
+                <p>Compreender de maneira mais clara e profunda o processo da alma e do espírito, na certeza de que tudo é passageiro e que somos todos integrantes de um projeto espiritual que nos dá a oportunidade de nos curar e de sermos também a manifestação da cura em movimento. Quanto mais consciência temos, mais a alma se expandirá.</p>
               </article>
               <article>
                 <Heart aria-hidden="true" />
                 <h3>Altruísmo</h3>
-                <p>Colocar conhecimento, tempo e cuidado a serviço do bem-estar de toda a comunidade.</p>
+                <p>Colocar conhecimento, tempo e cuidado a serviço de toda a comunidade, de maneira desinteressada e alinhada aos princípios da caridade.</p>
               </article>
               <article>
                 <Hand aria-hidden="true" />
                 <h3>Não violência</h3>
-                <p>Agir com respeito, escuta e responsabilidade, acolhendo cada pessoa e sua jornada.</p>
+                <p>Também conhecida como Ahimsa, que significa não causar dano às pessoas, à natureza ou aos animais. Optamos por escolher a vida, alinhada aos princípios da compaixão, compreendendo que todos os seres merecem ser vistos com respeito, escuta e acolhimento.</p>
               </article>
             </div>
           </div>
