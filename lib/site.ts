@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const siteConfig = {
   name: "Casa Universalista Sol do Oriente",
-  shortName: "Casa SOL",
+  shortName: "Casa Sol",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.casasoldooriente.com.br",
   description:
     "Casa Universalista Sol do Oriente: expansão da consciência, altruísmo, não violência, projetos sociais e acolhimento espiritual em Curitiba.",

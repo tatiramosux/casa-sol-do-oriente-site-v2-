@@ -50,7 +50,7 @@ export function SiteFooter() {
           <img src="/casa-sol/logo.png" alt="Casa Sol do Oriente" />
           <a href="https://maps.app.goo.gl/fiymuvcitenE4DKF7" target="_blank" rel="noreferrer"><MapPin aria-hidden="true" /><span>Rua Francisco Nunes, 437<br />Rebouças · Curitiba / PR</span></a>
         </div>
-        <div className={styles.footerColumn}><strong>Casa SOL</strong><a href="/historia">Nossa história</a><a href="/ritualistica">Ritualística</a><a href="/projetos">Projetos</a><a href="/musicalidade">Musicalidade</a></div>
+        <div className={styles.footerColumn}><strong>Casa Sol</strong><a href="/historia">Nossa história</a><a href="/ritualistica">Ritualística</a><a href="/projetos">Projetos</a><a href="/musicalidade">Musicalidade</a></div>
         <div className={styles.footerColumn}><strong>Participe</strong><a href="/calendario">Calendário</a><a href="/ingresso">Ingresso</a><a href="/gira">Gira de segunda</a><a href="/projetos/hospital-terapeutico">Hospital Terapêutico</a></div>
         <div className={styles.footerColumn}><strong>Conecte-se</strong><a href="https://www.instagram.com/casasoldooriente/" target="_blank" rel="noreferrer"><AtSign aria-hidden="true" />Instagram</a></div>
       </div>

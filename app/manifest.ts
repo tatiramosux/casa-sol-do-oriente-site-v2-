@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Casa Universalista Sol do Oriente",
-    short_name: "Casa SOL",
+    short_name: "Casa Sol",
     description: "Acolhimento espiritual, projetos sociais e expansão da consciência em Curitiba.",
     start_url: "/",
     display: "standalone",
