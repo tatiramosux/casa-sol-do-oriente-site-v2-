@@ -49,7 +49,7 @@ const projects = [
     title: "Palestra com Prof. Wagner Borges",
     badge: "Evento",
     eyebrow: "Parceria Editora KOI",
-    image: "/casa-sol/evento-wagner-borges-uhd.jpg",
+    image: "/casa-sol/wagner-borges-palestra.jpg",
     href: "https://wagnerborges.koieditora.com.br/",
     external: true,
     actionLabel: "Saiba mais",
