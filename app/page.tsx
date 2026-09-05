@@ -126,6 +126,27 @@ const projects = [
 
 type ProjectDateKey = Exclude<(typeof projects)[number]["dateKey"], null>;
 type UpcomingProjectDates = Partial<Record<ProjectDateKey, string>>;
+type NoGiraNotice = {
+  start: string;
+  end: string;
+  allDay: boolean;
+  holidayName: string;
+};
+type CarouselProject = {
+  title: string;
+  badge: string;
+  eyebrow: string;
+  image: string;
+  href: string;
+  external: boolean;
+  actionLabel: string;
+  dateKey: ProjectDateKey | null;
+  fixedDate: string | null;
+  showUntil: string | null;
+  alt: string;
+  description: string;
+  isNoGira?: boolean;
+};
 
 function formatProjectDate(value: string) {
   const date = new Date(value);
@@ -138,6 +159,24 @@ function formatProjectDate(value: string) {
     minute: "2-digit",
   });
   return `${day} · ${time}`;
+}
+
+function formatNoGiraDate(value: string, allDay: boolean) {
+  const date = allDay
+    ? new Date(`${value.slice(0, 10)}T12:00:00-03:00`)
+    : new Date(value);
+  return date.toLocaleDateString("pt-BR", {
+    day: "numeric",
+    month: "long",
+  });
+}
+
+function noGiraEndTime(notice: NoGiraNotice) {
+  return Date.parse(
+    notice.allDay
+      ? `${notice.end.slice(0, 10)}T00:00:00-03:00`
+      : notice.end,
+  );
 }
 
 const navItems = [
@@ -177,6 +216,8 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [upcomingProjectDates, setUpcomingProjectDates] =
     useState<UpcomingProjectDates | null>(null);
+  const [noGiraNotice, setNoGiraNotice] =
+    useState<NoGiraNotice | null>(null);
   // A data so existe no cliente: no servidor ela seria outra e causaria
   // divergencia de hidratacao. Ate a hidratacao, o servidor devolve null e
   // todos os slides aparecem.
@@ -188,13 +229,33 @@ export default function Home() {
 
   // Slides com prazo saem do carrossel sozinhos depois de showUntil, e a
   // numeracao dos demais se reorganiza porque vem da posicao na lista.
-  const visibleProjects = useMemo(
-    () =>
-      projects.filter(
+  const visibleProjects = useMemo(() => {
+    const carouselProjects: CarouselProject[] = noGiraNotice
+      ? projects.map((item, index) =>
+          index === 0
+            ? {
+                ...item,
+                title: "Não haverá gira — Feriado",
+                badge: "Aviso de agenda",
+                eyebrow: noGiraNotice.holidayName,
+                href: "/calendario",
+                actionLabel: "Ver calendário",
+                dateKey: null,
+                fixedDate: formatNoGiraDate(
+                  noGiraNotice.start,
+                  noGiraNotice.allDay,
+                ),
+                description: `Feriado: ${noGiraNotice.holidayName}. Não haverá gira nesta data.`,
+                alt: `Imagem da Casa Sol em tons de cinza para informar que não haverá gira em razão de ${noGiraNotice.holidayName}`,
+                isNoGira: true,
+              }
+            : item,
+        )
+      : [...projects];
+    return carouselProjects.filter(
         (item) => !item.showUntil || today === null || item.showUntil >= today,
-      ),
-    [today],
-  );
+      );
+  }, [noGiraNotice, today]);
   // Se a lista encolher, o indice ativo pode ficar fora dela.
   const currentIndex =
     activeProject < visibleProjects.length ? activeProject : 0;
@@ -217,14 +278,40 @@ export default function Home() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch("/api/calendar/upcoming-projects", { cache: "no-store" })
-      .then((response) => (response.ok ? response.json() : null))
-      .then((data) => {
-        if (!cancelled && data?.dates) setUpcomingProjectDates(data.dates);
-      })
-      .catch(() => undefined);
+    let refreshTimer: number | undefined;
+    const refreshInterval = 15 * 60 * 1000;
+
+    const loadCalendar = () => {
+      fetch("/api/calendar/upcoming-projects", { cache: "no-store" })
+        .then((response) => (response.ok ? response.json() : null))
+        .then((data) => {
+          if (cancelled) return;
+          if (!data?.dates) {
+            refreshTimer = window.setTimeout(loadCalendar, refreshInterval);
+            return;
+          }
+          setUpcomingProjectDates(data.dates);
+          setNoGiraNotice(data.noGira || null);
+
+          const timeUntilExpiry = data.noGira
+            ? Math.max(1000, noGiraEndTime(data.noGira) - Date.now() + 1000)
+            : refreshInterval;
+          refreshTimer = window.setTimeout(
+            loadCalendar,
+            Math.min(refreshInterval, timeUntilExpiry),
+          );
+        })
+        .catch(() => {
+          if (!cancelled) {
+            refreshTimer = window.setTimeout(loadCalendar, refreshInterval);
+          }
+        });
+    };
+
+    loadCalendar();
     return () => {
       cancelled = true;
+      if (refreshTimer) window.clearTimeout(refreshTimer);
     };
   }, []);
 
@@ -283,7 +370,7 @@ export default function Home() {
             {visibleProjects.map((item, index) => (
               <img
                 key={item.title}
-                className={`${styles.projectImage} ${index === currentIndex ? styles.projectImageActive : ""}`}
+                className={`${styles.projectImage} ${item.isNoGira ? styles.projectImageNoGira : ""} ${index === currentIndex ? styles.projectImageActive : ""}`}
                 src={item.image}
                 alt={index === currentIndex ? item.alt : ""}
                 aria-hidden={index !== currentIndex}

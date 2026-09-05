@@ -307,6 +307,7 @@ Usar sombra apenas para comunicar elevação. Cards de conteúdo comuns preferem
 7. Localização, contato e footer.
 
 - Nos slides de projetos com agenda recorrente, como Hospital Terapêutico e Grupo de Apoio ao Luto, a hero mostra um status não clicável “Próxima data” alimentado automaticamente pelo Google Agenda. Se existir qualquer ocorrência futura cadastrada dentro do horizonte consultado, exibir sua data mesmo quando estiver em outro mês; se não houver ocorrência futura após a agenda carregar, exibir “Aguardando nova data”. Durante carregamento ou falha de sincronização, não inferir indisponibilidade. O antigo botão para o calendário não é exibido; “Conheça o projeto” permanece como ação principal do slide.
+- Quando o próximo item de agenda relacionado às giras for um evento da categoria cinza-escuro “Não haverá gira”, o primeiro slide substitui temporariamente a divulgação da próxima gira por um aviso “Não haverá gira — Feriado”. Um aviso distante não oculta giras marcadas para antes dele. A fotografia da gira permanece como referência em tons de cinza; o slide informa a data e o nome da data comemorativa oficial encontrada no mesmo dia, com ação para o calendário. Após o término do evento, a agenda é revalidada automaticamente e o slide volta à estrutura padrão com a próxima gira.
 
 #### Depoimentos do Google
 
